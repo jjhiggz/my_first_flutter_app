@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import './question.dart';
+import './answer.dart';
+
 // this is where the UI rendering work that kicks off the screen goes
 void main() => runApp(MyApp());
 
@@ -26,8 +29,18 @@ class _MyAppState extends State<MyApp> {
 
   Widget build(BuildContext context) {
     var questions = [
-      'What\'s your favorite color?',
-      'What\'s your favorite animal>'
+      {
+        'questionText': 'What\'s your favorite color?',
+        'answers': ['Black', 'Red', 'Green', 'White'],
+      },
+      {
+        'questionText': 'What\'s your favorite animal?',
+        'answers': ['duck', 'dog', 'HEROG', 'Fucker'],
+      },
+      {
+        'questionText': 'What\'s your favorite peron?',
+        'answers': ['jon', 'jonathan', 'HIGGZ', 'HUMBLEGAWWD'],
+      },
     ];
     return MaterialApp(
       home: Scaffold(
@@ -36,21 +49,13 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Text(
-              questions[_questionIndex],
+            Question(
+              questions[_questionIndex]['questionText'],
             ),
-            RaisedButton(
-              child: Text('Answer 1'),
-              onPressed: () => _answerQuestion(1),
-            ),
-            RaisedButton(
-              child: Text('Answer 2'),
-              onPressed: () => _answerQuestion(2),
-            ),
-            RaisedButton(
-              child: Text('Answer 3'),
-              onPressed: () => _answerQuestion(3),
-            ),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
