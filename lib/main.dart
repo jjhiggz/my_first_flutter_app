@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
 
 // this is where the UI rendering work that kicks off the screen goes
 void main() => runApp(MyApp());
@@ -15,49 +14,48 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answers': ['Black', 'Red', 'Green', 'White'],
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['duck', 'dog', 'HEROG', 'Fucker'],
+    },
+    {
+      'questionText': 'What\'s your favorite peron?',
+      'answers': ['jon', 'jonathan', 'HIGGZ', 'HUMBLEGAWWD'],
+    },
+  ];
 
-  void _answerQuestion(int answerNumber) {
-    print(_questionIndex);
+  var questionIndex = 0;
+
+  void answerQuestion(int answerNumber) {
+    print(questionIndex);
     setState(() {
-      _questionIndex = _questionIndex + 1;
+      questionIndex = questionIndex + 1;
     });
-    print(_questionIndex);
+    print(questionIndex);
   }
 
   @override //makes it clear that we are overriding the build widget for My app with the build wideget for our child widget
 
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favorite color?',
-        'answers': ['Black', 'Red', 'Green', 'White'],
-      },
-      {
-        'questionText': 'What\'s your favorite animal?',
-        'answers': ['duck', 'dog', 'HEROG', 'Fucker'],
-      },
-      {
-        'questionText': 'What\'s your favorite peron?',
-        'answers': ['jon', 'jonathan', 'HIGGZ', 'HUMBLEGAWWD'],
-      },
-    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQuestion, answer);
-            }).toList()
-          ],
-        ),
+        body: questionIndex < _questions.length
+            ? Quiz(
+                questions: _questions,
+                questionIndex: questionIndex,
+                answerQuestion: answerQuestion,
+              )
+            : Center(
+                child: Text('you have finished'),
+              ),
       ),
     ); // does base set up that turns base combination into a full app
   }
